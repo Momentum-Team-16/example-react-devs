@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { DateGreeting } from './components/DateGreeting'
 
 function App(props) {
   // I don't _really_ need this to be in state, since as is these values don't change.
@@ -13,14 +14,19 @@ function App(props) {
   ])
 
   return (
-    <div className="App">
-      <h1>React Devs For Hire</h1>
-      <div className="dev-list" id="dev-list">
+      <>
+      <header>
+        <h1>React Devs For Hire</h1>
+      </header>
+      <main>
+      <DateGreeting />
+      <div className="dev-list">
         {devs.map((dev) => (
-          <Developer name={dev.name} expertise={dev.expertise} />
+          <Developer name={dev.name} expertise={dev.expertise} key={dev.name} />
         ))}
       </div>
-    </div>
+      </main>
+      </>
   )
 }
 
@@ -31,9 +37,13 @@ function Developer({ name, expertise }) {
 
   return (
     <div style={{ border: 'solid 1px silver', margin: '5px', padding: '10px' }}>
-      <p>{name}</p>
-      <button onClick={handleClick}>More Info</button>
-      {expanded && <p>{expertise}</p>}
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <p>{name}</p>
+        <button className="button button-outline" onClick={handleClick}>
+          More Info
+        </button>
+      </div>
+      <div>{expanded && <p>{expertise}</p>}</div>
     </div>
   )
 }
