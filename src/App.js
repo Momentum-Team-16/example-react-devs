@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DateGreeting } from './components/DateGreeting'
+import axios from 'axios'
 
 function App(props) {
   // I don't _really_ need this to be in state, since as is these values don't change.
@@ -7,34 +8,53 @@ function App(props) {
   // But if they were going to change, which they definitely would in a real application,
   // I'd want this info to be in state.
   const [devs, setDevs] = useState([
-    { name: 'Daniel', expertise: 'JS, Beats' },
-    { name: 'Cameron', expertise: 'JS, Soccer' },
-    { name: 'Lucian', expertise: 'JS, Corny Memes' },
-    { name: 'Marcus', expertise: 'JS, Comic Books' },
+    { name: 'Daniel', expertise: 'JS, Beats', gitHub: 'villeryd' },
+    { name: 'Cameron', expertise: 'JS, Soccer', gitHub: 'cameronpoulton' },
+    { name: 'Lucian', expertise: 'JS, Corny Memes', gitHub: 'BitGitMart' },
+    { name: 'Marcus', expertise: 'JS, Comic Books', gitHub: 'marcusvno' },
+    {
+      name: 'Capel',
+      expertise: 'JS, All Things Audio',
+      gitHub: 'capelhoworth',
+    },
   ])
 
   return (
-      <>
+    <>
       <header>
         <h1>React Devs For Hire</h1>
       </header>
       <main>
-      <DateGreeting />
-      <div className="dev-list">
-        {devs.map((dev) => (
-          <Developer name={dev.name} expertise={dev.expertise} key={dev.name} />
-        ))}
-      </div>
+        <DateGreeting />
+        <div className="dev-list">
+          {devs.map((dev) => (
+            <Developer
+              name={dev.name}
+              expertise={dev.expertise}
+              key={dev.name}
+              gitHub={dev.gitHub}
+            />
+          ))}
+        </div>
       </main>
-      </>
+    </>
   )
 }
 
-function Developer({ name, expertise }) {
+function Developer({ name, expertise, gitHub }) {
   const [expanded, setExpanded] = useState(false)
+  const [repos, setRepos] = useState(null)
+
+  useEffect(() => {
+    console.log('Use Effect runs')
+    axios
+      .get(`https://api.github.com/users/${gitHub}/repos?per_page=5`)
+      .then((response) => setRepos(response.data.map(obj => obj.full_name)))
+  }, [gitHub])
 
   const handleClick = () => setExpanded(!expanded)
 
+  console.log('About to return')
   return (
     <div style={{ border: 'solid 1px silver', margin: '5px', padding: '10px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -43,7 +63,18 @@ function Developer({ name, expertise }) {
           More Info
         </button>
       </div>
-      <div>{expanded && <p>{expertise}</p>}</div>
+      <div>
+        {expanded && (
+          <>
+            <p>{expertise}</p>
+            <ul>
+              {repos.map((repo) => (
+                <li>{repo}</li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
     </div>
   )
 }
