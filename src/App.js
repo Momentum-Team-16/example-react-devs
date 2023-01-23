@@ -53,12 +53,14 @@ function Developer({ name, expertise, gitHub }) {
 
   const handleClick = () => setExpanded(!expanded)
 
+  const buttonText = expanded ? 'Less Info' : 'More Info'
+
   return (
     <div style={{ border: 'solid 1px silver', margin: '5px', padding: '10px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <p>{name}</p>
         <button className="button button-outline" onClick={handleClick}>
-          More Info
+          {buttonText}
         </button>
       </div>
       <div>
