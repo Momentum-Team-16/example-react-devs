@@ -46,7 +46,6 @@ function Developer({ name, expertise, gitHub }) {
   const [repos, setRepos] = useState([])
 
   useEffect(() => {
-    console.log('Use Effect runs')
     axios
       .get(`https://api.github.com/users/${gitHub}/repos?per_page=5`)
       .then((response) => setRepos(response.data.map(obj => [obj.name, obj.html_url])))
@@ -54,7 +53,6 @@ function Developer({ name, expertise, gitHub }) {
 
   const handleClick = () => setExpanded(!expanded)
 
-  console.log('About to return')
   return (
     <div style={{ border: 'solid 1px silver', margin: '5px', padding: '10px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
