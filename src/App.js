@@ -49,7 +49,7 @@ function Developer({ name, expertise, gitHub }) {
     console.log('Use Effect runs')
     axios
       .get(`https://api.github.com/users/${gitHub}/repos?per_page=5`)
-      .then((response) => setRepos(response.data.map(obj => obj.full_name)))
+      .then((response) => setRepos(response.data.map(obj => [obj.name, obj.html_url])))
   }, [gitHub])
 
   const handleClick = () => setExpanded(!expanded)
@@ -68,8 +68,8 @@ function Developer({ name, expertise, gitHub }) {
           <>
             <p>{expertise}</p>
             <ul>
-              {repos.map((repo) => (
-                <li>{repo}</li>
+              {repos.map(([repoName, repoURL]) => (
+                <li><a href={repoURL} target="_blank" rel="noreferrer">{repoName}</a></li>
               ))}
             </ul>
           </>
