@@ -43,7 +43,7 @@ function App(props) {
 
 function Developer({ name, expertise, gitHub }) {
   const [expanded, setExpanded] = useState(false)
-  const [repos, setRepos] = useState(null)
+  const [repos, setRepos] = useState([])
 
   useEffect(() => {
     console.log('Use Effect runs')
