@@ -69,7 +69,7 @@ function Developer({ name, expertise, gitHub }) {
             <p>{expertise}</p>
             <ul>
               {repos.map(([repoName, repoURL]) => (
-                <li><a href={repoURL} target="_blank" rel="noreferrer">{repoName}</a></li>
+                <li key={repoURL}><a href={repoURL} target="_blank" rel="noreferrer">{repoName}</a></li>
               ))}
             </ul>
           </>
