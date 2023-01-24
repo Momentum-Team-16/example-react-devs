@@ -18,6 +18,12 @@ function App(props) {
       gitHub: 'capelhoworth',
     },
   ])
+  const [selectedDev, setSelectedDev] = useState("")
+
+  if (selectedDev) {
+    const dev = devs.filter(dev => dev.name === selectedDev)[0]
+    return <DeveloperDetail name={dev.name} setSelectedDev={setSelectedDev} gitHub={dev.gitHub} expertise={dev.expertise}/>
+  }
 
   return (
     <>
@@ -33,6 +39,7 @@ function App(props) {
               expertise={dev.expertise}
               key={dev.name}
               gitHub={dev.gitHub}
+              selectDev={setSelectedDev}
             />
           ))}
         </div>
@@ -41,8 +48,22 @@ function App(props) {
   )
 }
 
-function Developer({ name, expertise, gitHub }) {
-  const [expanded, setExpanded] = useState(false)
+function Developer({ name, selectDev }) {
+
+  return (
+    <div style={{ border: 'solid 1px silver', margin: '5px', padding: '10px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <p>{name}</p>
+        <button className="button button-outline" onClick={() => selectDev(name)}>
+          Select This Dev
+        </button>
+      </div>
+
+    </div>
+  )
+}
+
+function DeveloperDetail({name, expertise, gitHub, setSelectedDev}) {
   const [repos, setRepos] = useState([])
 
   useEffect(() => {
@@ -51,20 +72,11 @@ function Developer({ name, expertise, gitHub }) {
       .then((response) => setRepos(response.data.map(obj => [obj.name, obj.html_url])))
   }, [gitHub])
 
-  const handleClick = () => setExpanded(!expanded)
-
-  const buttonText = expanded ? 'Less Info' : 'More Info'
-
   return (
-    <div style={{ border: 'solid 1px silver', margin: '5px', padding: '10px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <p>{name}</p>
-        <button className="button button-outline" onClick={handleClick}>
-          {buttonText}
-        </button>
-      </div>
+    <>
+      <button onClick={() => setSelectedDev("")}>Back to List</button>
+      <h1>Details about {name}</h1>
       <div>
-        {expanded && (
           <>
             <p>{expertise}</p>
             <ul>
@@ -73,9 +85,8 @@ function Developer({ name, expertise, gitHub }) {
               ))}
             </ul>
           </>
-        )}
       </div>
-    </div>
+    </>
   )
 }
 
