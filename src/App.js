@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { DateGreeting } from './components/DateGreeting'
 import axios from 'axios'
+import { Questions } from "./components/Trivia";
 
 function App(props) {
   // I don't _really_ need this to be in state, since as is these values don't change.
@@ -25,31 +26,25 @@ function App(props) {
     return <DeveloperDetail name={dev.name} setSelectedDev={setSelectedDev} gitHub={dev.gitHub} expertise={dev.expertise}/>
   }
 
+
+  // I'm hard coding this here but this value could come from anywhere.
+  // In your app, you'd want to know what category the user selected,
+  // so you would want to have it in state somewhere
+  const categoryId = 10
+
   return (
     <>
       <header>
         <h1>React Devs For Hire</h1>
       </header>
       <main>
-        <DateGreeting />
-        <div className="dev-list">
-          {devs.map((dev) => (
-            <Developer
-              name={dev.name}
-              expertise={dev.expertise}
-              key={dev.name}
-              gitHub={dev.gitHub}
-              selectDev={setSelectedDev}
-            />
-          ))}
-        </div>
+        <Questions categoryId={categoryId}/>
       </main>
     </>
   )
 }
 
 function Developer({ name, selectDev }) {
-
   return (
     <div style={{ border: 'solid 1px silver', margin: '5px', padding: '10px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
