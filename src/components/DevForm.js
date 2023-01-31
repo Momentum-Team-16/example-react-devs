@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-const DevForm = ({addNewDev}) => {
+const DevForm = ({ addNewDev }) => {
   const [name, setName] = useState('')
   const [expertise, setExpertise] = useState('')
   const [github, setGithub] = useState('')
   const [available, setAvailable] = useState(true)
 
-  const resetForm =  () => {
+  const resetForm = () => {
     setName('')
     setExpertise('')
     setGithub('')
@@ -17,14 +17,24 @@ const DevForm = ({addNewDev}) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     const devEndpoint = 'https://node-api-devs-for-hire.glitch.me/devs'
-    axios.post(devEndpoint, {
-      name, expertise, github, available
-    }, {
-      headers: {"admin_key": process.env.REACT_APP_ADMIN_KEY}
-    }).then(res => {
-      addNewDev(res.data.created)
-      resetForm()
-    }).catch(e => console.log(e))
+    axios
+      .post(
+        devEndpoint,
+        {
+          name,
+          expertise,
+          github,
+          available,
+        },
+        {
+          headers: { admin_key: process.env.REACT_APP_ADMIN_KEY },
+        }
+      )
+      .then((res) => {
+        addNewDev(res.data.created)
+        resetForm()
+      })
+      .catch((e) => console.log(e))
   }
 
   return (
