@@ -26,19 +26,24 @@ function App(props) {
     return <DeveloperDetail name={dev.name} setSelectedDev={setSelectedDev} gitHub={dev.gitHub} expertise={dev.expertise}/>
   }
 
-
-  // I'm hard coding this here but this value could come from anywhere.
-  // In your app, you'd want to know what category the user selected,
-  // so you would want to have it in state somewhere
-  const categoryId = 10
-
   return (
     <>
       <header>
         <h1>React Devs For Hire</h1>
       </header>
       <main>
-        <Questions categoryId={categoryId}/>
+      <DateGreeting />
+        <div className="dev-list">
+          {devs.map((dev) => (
+            <Developer
+              name={dev.name}
+              expertise={dev.expertise}
+              key={dev.name}
+              gitHub={dev.gitHub}
+              selectDev={setSelectedDev}
+            />
+          ))}
+        </div>
       </main>
     </>
   )
