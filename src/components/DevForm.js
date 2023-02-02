@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-const DevForm = ({ addNewDev }) => {
+const DevForm = ({ addNewDev, token }) => {
   const [name, setName] = useState('')
   const [expertise, setExpertise] = useState('')
   const [github, setGithub] = useState('')
@@ -27,7 +27,7 @@ const DevForm = ({ addNewDev }) => {
           available,
         },
         {
-          headers: { admin_key: process.env.REACT_APP_ADMIN_KEY },
+          headers: { "authorization": token },
         }
       )
       .then((res) => {
