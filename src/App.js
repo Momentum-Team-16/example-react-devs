@@ -36,7 +36,7 @@ function App(props) {
   }
 
   const handleAddNewDev = (devObj) => {
-    setDevs(orderBy([devObj, ...devs], ['id']))
+    setDevs((devs) => [...devs, devObj])
   }
 
   return (
