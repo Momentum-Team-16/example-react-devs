@@ -31,7 +31,6 @@ export function DeveloperDetail() {
 
   return (
     <>
-    <Link to="/">Back to List</Link>
       <h1>Details about {dev.name}</h1>
       <div>
         <>

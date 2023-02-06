@@ -1,0 +1,16 @@
+* {
+  box-sizing: border-box;
+}
+
+a.btn {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  background-color: #CAC4CE;
+  padding: 0.25em 0.75em;
+  min-width: 10ch;
+  min-height: 44px;
+}
+

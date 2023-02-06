@@ -6,14 +6,18 @@ import DevForm from './components/DevForm'
 import orderBy from 'lodash'
 import Login from './components/Login'
 import useLocalStorageState from 'use-local-storage-state'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Link, useLocation } from 'react-router-dom'
 import DevList from './components/DevList'
+import './App.css'
 
 function App(props) {
   const [devs, setDevs] = useState([])
-  const [selectedDev, setSelectedDev] = useState('')
-  const [token, setToken] = useLocalStorageState("devsToken", "")
-  const [loggedInUser, setLoggedInUser] = useLocalStorageState('devsLoggedInUser', "")
+  const [token, setToken] = useLocalStorageState('devsToken', '')
+  const [loggedInUser, setLoggedInUser] = useLocalStorageState(
+    'devsLoggedInUser',
+    ''
+  )
+  const location = useLocation()
 
   useEffect(() => {
     axios
@@ -21,43 +25,40 @@ function App(props) {
       .then((res) => setDevs(res.data))
   }, [])
 
-  // if (!token){
-  //   return <Login setLoggedInUser={setLoggedInUser} setToken={setToken} />
-  // }
-
-  if (selectedDev) {
-    const dev = devs.filter((dev) => dev.name === selectedDev)[0]
-    return (
-      <DeveloperDetail
-        name={dev.name}
-        setSelectedDev={setSelectedDev}
-        gitHub={dev.gitHub}
-        expertise={dev.expertise}
-      />
-    )
-  }
-
   const handleAddNewDev = (devObj) => {
     setDevs((devs) => [...devs, devObj])
   }
 
   return (
     <>
-      <header>
+      <header style={{ display: 'flex', justifyContent: 'space-between' }}>
         <h1>React Devs For Hire</h1>
+        {token && (
+          <nav className="nav">
+            <Link to="/devs/new" className="btn">
+              Add a new dev
+            </Link>
+          </nav>
+        )}
       </header>
       <main>
-        <DateGreeting  loggedInUser={loggedInUser} />
-        <Routes>
-          <Route path="/" element={<DevList devs={devs} />}/>
-          <Route path="/devs/:id" element={<DeveloperDetail />}/>
-        </Routes>
-
+        {location.pathname !== '/' && <Link to="/">Back to List</Link>}
+        {token ? (
+          <>
+            <DateGreeting loggedInUser={loggedInUser} />
+            <Routes>
+              <Route path="/" element={<DevList devs={devs} />} />
+              <Route path="/devs/:id" element={<DeveloperDetail />} />
+              <Route
+                path="/devs/new"
+                element={<DevForm addNewDev={handleAddNewDev} token={token} />}
+              />
+            </Routes>
+          </>
+        ) : (
+          <Login setLoggedInUser={setLoggedInUser} setToken={setToken} />
+        )}
       </main>
-      <div className="form">
-        <h2>Add a new dev</h2>
-        <DevForm addNewDev={handleAddNewDev} token={token} />
-      </div>
     </>
   )
 }

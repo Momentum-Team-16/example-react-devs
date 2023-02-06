@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const DevForm = ({ addNewDev, token }) => {
   const [name, setName] = useState('')
   const [expertise, setExpertise] = useState('')
   const [github, setGithub] = useState('')
   const [available, setAvailable] = useState(true)
+  const navigate = useNavigate()
 
   const resetForm = () => {
     setName('')
@@ -33,11 +35,14 @@ const DevForm = ({ addNewDev, token }) => {
       .then((res) => {
         addNewDev(res.data.created)
         resetForm()
+        navigate("/")
       })
       .catch((e) => console.log(e))
   }
 
   return (
+    <div className="form">
+    <h2>Add a new dev</h2>
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="name">Name</label>
@@ -83,6 +88,7 @@ const DevForm = ({ addNewDev, token }) => {
       </div>
       <button type="submit">Submit</button>
     </form>
+    </div>
   )
 }
 
