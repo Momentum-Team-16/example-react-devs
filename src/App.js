@@ -6,6 +6,8 @@ import DevForm from './components/DevForm'
 import orderBy from 'lodash'
 import Login from './components/Login'
 import useLocalStorageState from 'use-local-storage-state'
+import { Route, Routes } from 'react-router-dom'
+import DevList from './components/DevList'
 
 function App(props) {
   const [devs, setDevs] = useState([])
@@ -19,9 +21,9 @@ function App(props) {
       .then((res) => setDevs(res.data))
   }, [])
 
-  if (!token){
-    return <Login setLoggedInUser={setLoggedInUser} setToken={setToken} />
-  }
+  // if (!token){
+  //   return <Login setLoggedInUser={setLoggedInUser} setToken={setToken} />
+  // }
 
   if (selectedDev) {
     const dev = devs.filter((dev) => dev.name === selectedDev)[0]
@@ -46,17 +48,11 @@ function App(props) {
       </header>
       <main>
         <DateGreeting  loggedInUser={loggedInUser} />
-        <div className="dev-list">
-          {devs.map((dev) => (
-            <Developer
-              name={dev.name}
-              expertise={dev.expertise}
-              key={dev.id}
-              gitHub={dev.gitHub}
-              selectDev={setSelectedDev}
-            />
-          ))}
-        </div>
+        <Routes>
+          <Route path="/" element={<DevList devs={devs} />}/>
+          <Route path="/devs/:id" element={<DeveloperDetail />}/>
+        </Routes>
+
       </main>
       <div className="form">
         <h2>Add a new dev</h2>
