@@ -8,6 +8,7 @@ const DevForm = ({ addNewDev, token }) => {
   const [github, setGithub] = useState('')
   const [available, setAvailable] = useState(true)
   const navigate = useNavigate()
+  const [error, setError] = useState()
 
   const resetForm = () => {
     setName('')
@@ -29,65 +30,66 @@ const DevForm = ({ addNewDev, token }) => {
           available,
         },
         {
-          headers: { "authorization": token },
+          headers: { authorization: token },
         }
       )
       .then((res) => {
         addNewDev(res.data.created)
         resetForm()
-        navigate("/")
+        navigate('/')
       })
-      .catch((e) => console.log(e))
+      .catch((e) => setError(e))
   }
 
   return (
     <div className="form">
-    <h2>Add a new dev</h2>
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="expertise">Expertise</label>
-        <input
-          type="text"
-          name="expertise"
-          id="expertise"
-          value={expertise}
-          onChange={(e) => setExpertise(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="github">GitHub Username</label>
-        <input
-          type="text"
-          name="github"
-          id="github"
-          value={github}
-          onChange={(e) => setGithub(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="available">
-          Available for hire
+      <h2>Add a new dev</h2>
+      {error && <div style={{backgroundColor: "pink", padding: "10px"}}> {error.message} </div>}
+      <form onSubmit={handleSubmit} onFocus={() => setError('')}>
+        <div>
+          <label htmlFor="name">Name</label>
           <input
-            type="checkbox"
-            name="available"
-            id="available"
-            checked={available}
-            onChange={(e) => setAvailable(e.target.checked)}
+            type="text"
+            name="name"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
-        </label>
-      </div>
-      <button type="submit">Submit</button>
-    </form>
+        </div>
+        <div>
+          <label htmlFor="expertise">Expertise</label>
+          <input
+            type="text"
+            name="expertise"
+            id="expertise"
+            value={expertise}
+            onChange={(e) => setExpertise(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="github">GitHub Username</label>
+          <input
+            type="text"
+            name="github"
+            id="github"
+            value={github}
+            onChange={(e) => setGithub(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="available">
+            Available for hire
+            <input
+              type="checkbox"
+              name="available"
+              id="available"
+              checked={available}
+              onChange={(e) => setAvailable(e.target.checked)}
+            />
+          </label>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
     </div>
   )
 }
